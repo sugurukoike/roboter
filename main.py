@@ -1,4 +1,12 @@
 import csv
+import logging
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+handler = logging.FileHandler('logtest.log')
+logger.addHandler(handler)
 
 
 def main():
@@ -13,7 +21,7 @@ def main():
     if len(posted_restaurants) == 0:
         print(f'{user_name}さん。どこのレストランが好きですか?')
         restaurant_name = input()
-        restaurant_name = restaurant_name.capitalize()
+        restaurant_name = restaurant_name.title()
 
         posted_restaurants[restaurant_name] = 1
 
@@ -29,14 +37,14 @@ def main():
         for recommend_restaurant in recommend_restaurants_ranking:
             print(
                 f'私のオススメのレストランは、{recommend_restaurant}です。\nこのレストランは好きですか？[Yes/No]')
-            yes_no_answer = input()
-            yes_no_answer = yes_no_answer.lower()
-            if yes_no_answer == 'yes':
+            is_yes = input()
+            is_yes = is_yes.lower()
+            if is_yes == 'yes':
                 break
 
         print(f'{user_name}さん。どこのレストランが好きですか?')
         restaurant_name = input()
-        restaurant_name = restaurant_name.capitalize()
+        restaurant_name = restaurant_name.title()
 
         if restaurant_name in posted_restaurants:
             posted_restaurants[restaurant_name] += 1
@@ -60,12 +68,24 @@ def read_csv(csv_file_path):
 
 
 def write_csv(csv_file_path, restaurants_dict):
+    logger.info({
+        'action': 'write',
+        'csv_file': csv_file_path,
+        'args': restaurants_dict,
+        'status': 'run'
+    })
     with open(csv_file_path, 'w') as csv_file:
         fieldnames = ['Name', 'Count']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         for restaurant_name, count in restaurants_dict.items():
             writer.writerow({'Name': restaurant_name, 'Count': count})
+    logger.info({
+        'action': 'write',
+        'csv_file': csv_file_path,
+        'args': restaurants_dict,
+        'status': 'success'
+    })
 
 
 if __name__ == '__main__':
