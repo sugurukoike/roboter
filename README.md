@@ -12,7 +12,7 @@ https://user-images.githubusercontent.com/53923545/160141521-ba0e2326-5860-46fa-
 
 # Usage
 ```bash
-git clone https://github.com/sugurukoike/roboter.git
+https://github.com/suuu96/roboter.git
 cd roboter
 python main.py
 ```
